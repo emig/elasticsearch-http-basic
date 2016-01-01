@@ -11,8 +11,7 @@ import org.elasticsearch.http.HttpServerTransport;
 import org.elasticsearch.test.ElasticsearchIntegrationTest;
 import org.elasticsearch.test.rest.client.http.HttpRequestBuilder;
 import com.asquera.elasticsearch.plugins.http.HttpBasicServerPlugin;
-import org.elasticsearch.common.settings.ImmutableSettings.Builder;
-import org.elasticsearch.common.settings.ImmutableSettings;
+import org.elasticsearch.common.settings.Settings;
 
 /**
  *
@@ -31,7 +30,7 @@ ElasticsearchIntegrationTest {
    * set to localhost, from where the client's request ip will be done.
    */
   protected Builder builderWithPlugin() {
-    return ImmutableSettings.settingsBuilder()
+    return Settings.builder()
       .put("network.host", localhost)
       .put("plugin.types", HttpBasicServerPlugin.class.getName());
   }

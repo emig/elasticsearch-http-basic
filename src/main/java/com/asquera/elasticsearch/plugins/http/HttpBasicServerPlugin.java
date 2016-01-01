@@ -3,18 +3,17 @@ package com.asquera.elasticsearch.plugins.http;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.inject.Module;
 import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.plugins.AbstractPlugin;
+import org.elasticsearch.plugins.Plugin;
 import org.elasticsearch.common.component.LifecycleComponent;
-import org.elasticsearch.common.settings.ImmutableSettings;
+import org.elasticsearch.common.settings.Settings;
 
+import java.util.ArrayList;
 import java.util.Collection;
-
-import static org.elasticsearch.common.collect.Lists.*;
 
 /**
  * @author Florian Gilcher (florian.gilcher@asquera.de)
  */
-public class HttpBasicServerPlugin extends AbstractPlugin {
+public class HttpBasicServerPlugin extends Plugin {
 
     private boolean enabledByDefault = true;
     private final Settings settings;
@@ -31,29 +30,22 @@ public class HttpBasicServerPlugin extends AbstractPlugin {
         return "HTTP Basic Server Plugin";
     }
 
-    @Override public Collection<Class<? extends Module>> modules() {
-        Collection<Class<? extends Module>> modules = newArrayList();
-        if (settings.getAsBoolean("http.basic.enabled", enabledByDefault)) {
-            modules.add(HttpBasicServerModule.class);
-        }
-        return modules;
+    @Override
+    public Collection<Module> nodeModules() {
+    Collection<Module> modules = new ArrayList<>();
+    if (settings.getAsBoolean("http.basic.enabled", enabledByDefault)) {
+        modules.add(new HttpBasicServerModule(settings));
     }
-
-    @Override public Collection<Class<? extends LifecycleComponent>> services() {
-        Collection<Class<? extends LifecycleComponent>> services = newArrayList();
-        if (settings.getAsBoolean("http.basic.enabled", enabledByDefault)) {
-            services.add(HttpBasicServer.class);
-        }
-        return services;
+    return modules;
     }
 
     @Override public Settings additionalSettings() {
         if (settings.getAsBoolean("http.basic.enabled", enabledByDefault)) {
-            return ImmutableSettings.settingsBuilder().
-                    put("http.enabled", false).                    
+            return Settings.builder().
+                    put("http.enabled", false).
                     build();
         } else {
-            return ImmutableSettings.Builder.EMPTY_SETTINGS;
+            return Settings.builder().EMPTY_SETTINGS;
         }
     }
 }

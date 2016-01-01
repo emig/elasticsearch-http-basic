@@ -1,8 +1,8 @@
 package com.asquera.elasticsearch.plugins.http.auth;
+import org.elasticsearch.common.network.NetworkAddress;
 import java.net.InetAddress;
 import java.util.List;
 import java.util.ArrayList;
-
 /**
  * This class is responsible for determining the ip of the
  * remote client and if the client is authorized based on its ip.
@@ -74,7 +74,7 @@ public class Client {
    *
    */
   public String ip() {
-    String ip = requestIp.getHostAddress();
+    String ip = NetworkAddress.formatAddress(requestIp);
     if (xForwardedFor.isSet()) {
       ip = remoteClientIp();
     }
@@ -137,7 +137,7 @@ public class Client {
   private ProxyChain requestChain() {
     List<String> ipsChain = new ArrayList<String>();
     ipsChain.addAll(xForwardedFor.proxies());
-    ipsChain.add(requestIp.getHostAddress());
+    ipsChain.add(NetworkAddress.formatAddress(requestIp));
     return new ProxyChain(ipsChain);
   }
 
@@ -172,7 +172,7 @@ public class Client {
 
   @Override
   public String toString() {
-    String addr = requestIp.getHostAddress();
+    String addr = NetworkAddress.formatAddress(requestIp);
     String s = "client with request ip " + addr
       + (xForwardedFor.isSet() ? ", remoteIp: " + remoteClientIp() : "")
       + " is:"

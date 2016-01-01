@@ -19,8 +19,8 @@ public class ClientTest{
   private String[] whitelist   = { whitelistedIp };
   private String xForwardedFor =  "9.9.9.9,8.8.8.8,7.7.7.7";
 
-	@Test
-	public void authorizedWhitelistedRequestNilXForwardedFor() throws UnknownHostException {
+  @Test
+  public void authorizedWhitelistedRequestNilXForwardedFor() throws UnknownHostException {
     Client c = new Client(
       InetAddress.getByName(whitelistedIp),
       new InetAddressWhitelist(whitelist),
@@ -32,7 +32,7 @@ public class ClientTest{
       assertTrue(c.isAuthorized());
   }
 
-	public void authorizedWhitelistedRequestUnsetProxies() throws UnknownHostException {
+  public void authorizedWhitelistedRequestUnsetProxies() throws UnknownHostException {
     Client c = new Client(
       InetAddress.getByName(whitelistedIp),
       new InetAddressWhitelist(whitelist),
@@ -44,8 +44,8 @@ public class ClientTest{
       assertTrue(c.isAuthorized());
   }
 
-	@Test
-	public void unauthorizedWhitelistedRequestUnsetProxies() throws UnknownHostException {
+  @Test
+  public void unauthorizedWhitelistedRequestUnsetProxies() throws UnknownHostException {
     Client c = new Client(
       InetAddress.getByName(notWhitelistedIp),
       new InetAddressWhitelist(whitelist),
@@ -57,8 +57,8 @@ public class ClientTest{
       assertFalse(c.isAuthorized());
   }
 
-	@Test
-	public void ipOfUntrustedRequestViaProxiesIsFirstOfXForwardedFor() throws UnknownHostException {
+  @Test
+  public void ipOfUntrustedRequestViaProxiesIsFirstOfXForwardedFor() throws UnknownHostException {
     Client c = new Client(
       InetAddress.getByName(untrustedRequestIp),
       new InetAddressWhitelist(whitelist),
@@ -71,7 +71,7 @@ public class ClientTest{
   }
 
   @Test
-	public void ipOfTrustedRequestViaProxiesIsInXForwardedFor() throws UnknownHostException {
+  public void ipOfTrustedRequestViaProxiesIsInXForwardedFor() throws UnknownHostException {
     Client c = new Client(
       InetAddress.getByName(trustedRequestIp),
       new InetAddressWhitelist(whitelist),
@@ -84,7 +84,7 @@ public class ClientTest{
   }
 
   @Test
-	public void ipOfNotWhitelistedIpViaTrustedProxiesIsFirstOfXForwardedFor() throws UnknownHostException {
+  public void ipOfNotWhitelistedIpViaTrustedProxiesIsFirstOfXForwardedFor() throws UnknownHostException {
     String[] whitelist   = {"10.10.10.10"};
     Client c = new Client(
       InetAddress.getByName(trustedRequestIp),
@@ -98,7 +98,7 @@ public class ClientTest{
   }
 
   @Test
-	public void noXForwardedSetRequestIpWhitelisted() throws UnknownHostException {
+  public void noXForwardedSetRequestIpWhitelisted() throws UnknownHostException {
     Client c = new Client(
       InetAddress.getByName(whitelistedIp),
       new InetAddressWhitelist(whitelist),
@@ -111,7 +111,7 @@ public class ClientTest{
   }
 
   @Test
-	public void noXForwardedSetRequestIpNotWhitelisted() throws UnknownHostException {
+  public void noXForwardedSetRequestIpNotWhitelisted() throws UnknownHostException {
     Client c = new Client(
       InetAddress.getByName(notWhitelistedIp),
       new InetAddressWhitelist(whitelist),
@@ -124,7 +124,7 @@ public class ClientTest{
   }
 
   @Test
-	public void clientIsTrustedBySeveralProxyChains() throws UnknownHostException {
+  public void clientIsTrustedBySeveralProxyChains() throws UnknownHostException {
 
     String[] trustedIps = {"1.1.1.1,2.2.2.2,3.3.3.3","4.4.4.4,2.2.2.2,3.3.3.3"};
     String xForwardedFor = whitelistedIp + ",2.2.2.2";
@@ -140,7 +140,7 @@ public class ClientTest{
   }
 
   @Test
-	public void clientIsUntrustedAndInWhitelist() throws UnknownHostException {
+  public void clientIsUntrustedAndInWhitelist() throws UnknownHostException {
     String xForwardedFor = whitelistedIp + ",2.2.2.2";
     Client c = new Client(
       InetAddress.getByName(untrustedRequestIp),
@@ -154,7 +154,7 @@ public class ClientTest{
   }
 
   @Test
-	public void clientIsTrustedAndInWhitelistViaOneProxy() throws UnknownHostException {
+  public void clientIsTrustedAndInWhitelistViaOneProxy() throws UnknownHostException {
     String xForwardedFor = whitelistedIp;
     Client c = new Client(
       InetAddress.getByName(trustedRequestIp),
@@ -168,7 +168,7 @@ public class ClientTest{
   }
 
   @Test
-	public void clientIsUntrustedAndInWhitelistViaOneProxy() throws UnknownHostException {
+    public void clientIsUntrustedAndInWhitelistViaOneProxy() throws UnknownHostException {
     String xForwardedFor = whitelistedIp;
     Client c = new Client(
       InetAddress.getByName(untrustedRequestIp),
@@ -182,7 +182,7 @@ public class ClientTest{
   }
 
   @Test
-	public void lastXForwardTrustedProxyIsNotwhitelistedClient() throws UnknownHostException {
+    public void lastXForwardTrustedProxyIsNotwhitelistedClient() throws UnknownHostException {
     String[] trustedIps = {"3.3.3.3,2.2.2.2,1.1.1.1," + trustedRequestIp};
     String xForwardedFor = notWhitelistedIp + "," + whitelistedIp + ",3.3.3.3,2.2.2.2";
     Client c = new Client(
@@ -197,7 +197,7 @@ public class ClientTest{
   }
 
   @Test
-	public void lastXForwardTrustedProxyIsWhitelistedClient() throws UnknownHostException {
+    public void lastXForwardTrustedProxyIsWhitelistedClient() throws UnknownHostException {
     String[] trustedIps = {"3.3.3.3,2.2.2.2," + trustedRequestIp};
     String xForwardedFor = notWhitelistedIp + "," + whitelistedIp + ",2.2.2.2";
     Client c = new Client(
@@ -213,7 +213,7 @@ public class ClientTest{
 
 
   @Test
-	public void longestTrustedChainDefinesClientNontInWhitelist() throws UnknownHostException {
+    public void longestTrustedChainDefinesClientNontInWhitelist() throws UnknownHostException {
     String xForwardedFor =  notWhitelistedIp + "," + whitelistedIp + ",2.2.2.2";
     String[] trustedIps = { xForwardedFor + "," + trustedRequestIp};
     Client c = new Client(
